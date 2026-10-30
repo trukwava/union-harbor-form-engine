@@ -26,9 +26,49 @@ export function formatAnswer(a:Answer|undefined):string {if(!a||a.state==='blank
 const valueOf=(a:Answer|undefined)=>a?.state==='value'?a.value:undefined;
 export function ruleMatches(rule:BranchRule, answers:Record<string,Answer>):boolean {const v=valueOf(answers[rule.field]);switch(rule.op){case 'eq':return v!==undefined&&v===rule.value;case 'neq':return v!==undefined&&v!==rule.value;case 'in':return v!==undefined&&Array.isArray(rule.value)&&rule.value.includes(v);case 'exists':return v!==undefined&&v.trim()!=='';default:return false;}}
 export function selectedBlocks(v:TemplateVersion, answers:Record<string,Answer>) {return [...v.blocks].sort((a,b)=>a.order-b.order).filter(block=>v.branches.filter(r=>r.blockId===block.id).every(r=>ruleMatches(r,answers)));}
-export function validateTemplate(v:TemplateVersion):string[]{const errors:string[]=[];if(!v.title?.trim())errors.push('Document title required');if(!isDateOnly(v.effectiveFrom))errors.push('Effective date must be valid');if(v.effectiveTo && (!isDateOnly(v.effectiveTo)||v.effectiveTo<v.effectiveFrom))errors.push('Effective-through date must be >= effective-from');if(v.variables?.length>40||v.blocks?.length>40||v.branches?.length>80)errors.push('Template limits exceeded');const keys=new Set<string>();for(const x of v.variables??[]){if(!/^[A-Za-z][A-Za-z0-9_]{0,40}$/.test(x.key))errors.push('Invalid variable key');if(keys.has(x.key))errors.push(`Duplicate variable: ${x.key}`);keys.add(x.key);if(!['text','select'].includes(x.type)||typeof x.required!=='boolean'||!x.label||!x.help)errors.push(`Invalid variable definition: ${x.key}`);if(x.choices && (x.choices.length>30||x.choices.some(a=>typeof a!=='string'||a.length>150)))errors.push(`Invalid choices: ${x.key}`);}
-const blockIds=new Set((v.blocks??[]).map(x=>x.id));for(const block of v.blocks??[]){if(typeof block.text!=='string'||block.text.length>8000||!block.id||typeof block.order!=='number')errors.push('Invalid approved text block');}for(const r of v.branches??[]){if(!['eq','neq','in','exists'].includes(r.op)||!keys.has(r.field)||!blockIds.has(r.blockId))errors.push('Invalid branch rule');if(r.op==='in'&&(!Array.isArray(r.value)||r.value.length>30))errors.push('Invalid in-rule');if(['eq','neq'].includes(r.op)&&typeof r.value!=='string')errors.push('Invalid comparison rule');}
-for(const field of v.outputFields??[]){if(!keys.has(field))errors.push('Unknown output field: '+field);}if(!v.validationRules||typeof v.validationRules.maxEntries!=='number'||v.validationRules.maxEntries<1||v.validationRules.maxEntries>300||typeof v.validationRules.requireEntry!=='boolean'||typeof v.validationRules.requireApprover!=='boolean')errors.push('Invalid validation rules');return errors;}
+export function validateTemplate(v:TemplateVersion):string[] {
+ const errors:string[]=[];
+ const object=(x:any):boolean=>x!==null && typeof x==='object' && !Array.isArray(x);
+ const string=(x:any,max:number):boolean=>typeof x==='string' && x.trim().length>0 && x.length<=max;
+ if(!object(v))return ['Template definition must be an object'];
+ if(!string(v.title,180))errors.push('Document title must be 1–180 characters');
+ if(typeof v.effectiveFrom!=='string'||!isDateOnly(v.effectiveFrom))errors.push('Effective date must be valid');
+ if(v.effectiveTo!==null && v.effectiveTo!==undefined && (typeof v.effectiveTo!=='string'||!isDateOnly(v.effectiveTo)||v.effectiveTo<v.effectiveFrom))errors.push('Effective-through date must be >= effective-from');
+ if(!Array.isArray(v.variables)||!Array.isArray(v.blocks)||!Array.isArray(v.branches)||!Array.isArray(v.outputFields)){
+  errors.push('Variables, blocks, branches, and outputFields must be arrays');return errors;
+ }
+ if(v.variables.length>40||v.blocks.length>40||v.branches.length>80||v.outputFields.length>40)errors.push('Template limits exceeded');
+ const keys=new Set<string>();
+ for(const x of v.variables){
+  if(!object(x)){errors.push('Invalid variable definition');continue;}
+  if(typeof x.key!=='string'||!/^[A-Za-z][A-Za-z0-9_]{0,40}$/.test(x.key)){errors.push('Invalid variable key');continue;}
+  if(keys.has(x.key))errors.push('Duplicate variable: '+x.key);keys.add(x.key);
+  if(!['text','select'].includes(x.type)||typeof x.required!=='boolean'||!string(x.label,120)||!string(x.help,1500))errors.push('Invalid variable definition: '+x.key);
+  if(x.maxLength!==undefined&&(!Number.isInteger(x.maxLength)||x.maxLength<1||x.maxLength>8000))errors.push('Invalid maximum length: '+x.key);
+  if(x.type==='select'&&(!Array.isArray(x.choices)||x.choices.length<1))errors.push('Select variable requires choices: '+x.key);
+  if(x.choices!==undefined&&(!Array.isArray(x.choices)||x.choices.length>30||x.choices.some((c:any)=>!string(c,150))||new Set(x.choices).size!==x.choices.length))errors.push('Invalid choices: '+x.key);
+ }
+ const blockIds=new Set<string>();
+ for(const b of v.blocks){
+  if(!object(b)||!string(b.id,60)||!string(b.label,120)||!string(b.text,8000)||!Number.isInteger(b.order)||b.order<0||b.order>10000){errors.push('Invalid approved text block');continue;}
+  if(blockIds.has(b.id))errors.push('Duplicate approved block: '+b.id);blockIds.add(b.id);
+ }
+ for(const r of v.branches){
+  if(!object(r)||!['eq','neq','in','exists'].includes(r.op)||!keys.has(r.field)||!blockIds.has(r.blockId)){errors.push('Invalid branch rule');continue;}
+  if(r.op==='in'&&(!Array.isArray(r.value)||r.value.length<1||r.value.length>30||r.value.some((x:any)=>typeof x!=='string'||x.length>150)))errors.push('Invalid in-rule');
+  if(['eq','neq'].includes(r.op)&&typeof r.value!=='string')errors.push('Invalid comparison rule');
+  if(r.op==='exists'&&r.value!==undefined)errors.push('Exists rule does not accept a value');
+ }
+ const seenOutput=new Set<string>();
+ for(const field of v.outputFields){
+  if(typeof field!=='string'||!keys.has(field))errors.push('Unknown output field: '+String(field));
+  if(seenOutput.has(field))errors.push('Duplicate output field: '+field);seenOutput.add(field);
+ }
+ const rule=v.validationRules;
+ if(!object(rule)||!Number.isInteger(rule.maxEntries)||rule.maxEntries<1||rule.maxEntries>300||typeof rule.requireEntry!=='boolean'||typeof rule.requireApprover!=='boolean')errors.push('Invalid validation rules');
+ else if(rule.requireApprover&&!keys.has('approverRef'))errors.push('Approver reference variable is required by validation rules');
+ return errors;
+}
 export function validateForm(form:FormInstance,v:TemplateVersion,profile:Profile):ValidationResult {const errors:ValidationIssue[]=[];const add=(code:string,path:string,message:string)=>errors.push({code,path,message});let totalMinutes=0;const entryMinutes:Record<string,number>={};if(form.organizationId!==profile.organizationId)add('scope','profileId','Profile outside organization');if(form.templateId!==v.templateId||form.templateVersionId!==v.id)add('pin','templateVersionId','Template-version pin mismatch');if(!isDateOnly(form.weekStart)||monday(form.weekStart)!==form.weekStart)add('week','weekStart','Choose a Monday to start the service week');if(!profile.fullName.trim())add('profile','profileId','Preparer name is required');for(const def of v.variables){const a=normalizedAnswer(form.answers[def.key]);if(def.required&&(a.state!=='value'||!a.value.trim()))add('required',`answers.${def.key}`,`${def.label} requires a supplied value (unknown / N/A are not sufficient)`);if(a.state==='value'&&a.value.length>(def.maxLength??2000))add('length',`answers.${def.key}`,`${def.label} exceeds its maximum length`);if(a.state==='value'&&def.type==='select'&&!def.choices?.includes(a.value))add('choice',`answers.${def.key}`,`Choose an approved ${def.label} option`);}
 if(v.validationRules.requireApprover){const a=normalizedAnswer(form.answers.approverRef);if(a.state!=='value'||!a.value.trim())add('approver','answers.approverRef','Approver reference is required');}
 if(v.validationRules.requireEntry&&form.entries.length===0)add('entries','entries','Add at least one service entry');if(form.entries.length>v.validationRules.maxEntries)add('count','entries','Too many service entries');const slots:Record<string,{s:number;e:number;id:string}[]>={};for(let i=0;i<form.entries.length;i++){const e=form.entries[i],p=`entries.${i}`;if(!isDateOnly(e.serviceDate)||!isDateOnly(form.weekStart)||e.serviceDate<form.weekStart||e.serviceDate>addDays(form.weekStart,6))add('date',`${p}.serviceDate`,'Service date must fall within the selected week');if(!e.activity?.trim())add('activity',`${p}.activity`,'Activity is required');if((e.activity||'').length>500||(e.notes||'').length>4000)add('length',p,'Entry text is too long');const s=minutes(e.start),end=minutes(e.end);if(s===null||end===null||s>=end){add('interval',p,'Provide valid times with end after start (same day)');continue;}

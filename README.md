@@ -67,6 +67,12 @@ This is **a single-organization, locally trusted demo**, not a deployable servic
 
 The app retains all demo form drafts, export snapshots, user-reported review records, and metadata audit events in `data/demo.json` until the operator resets it or deletes the file. The application does not send any documents or usage data to third parties. PDF generation temporarily stores an export in the system temp folder, removes it afterward, and has a conversion timeout. Treat imported text as untrusted; admin-published wording must be verified by its owner before any real pilot. Do not put personal records or secrets in this demo.
 
+## Export retries and template guardrails
+
+Creating an export snapshot is idempotent for the same form ID, answer revision, pinned template version, and document SHA-256 checksum. Repeating the request returns the existing immutable export with `reused: true`; editing and saving a new form revision produces a new snapshot. This avoids accidental duplicate exports during network retries while preserving historical documents. The UI indicates when it recovers an existing export.
+
+The template studio rejects malformed collections, duplicate variables/approved blocks/output fields, invalid select choices, missing required approver variables, and unsupported rule operands with a client-visible 422 validation response. These checks apply to newly published versions, never mutate existing pins, and do not certify any contractual wording.
+
 ## Recommended next phase
 
 See `docs/PILOT_PLAN.md`: validate the domain with a qualified owner, shadow-test 20 synthetic scenarios, obtain approved text, measure time/errors without invented performance claims, then decide whether to build authenticated persistence and a real approved-template import workflow.
