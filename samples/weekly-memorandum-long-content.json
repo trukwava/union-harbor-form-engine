@@ -1,0 +1,54 @@
+{
+  "title": "Weekly Service-Hours Memorandum",
+  "organization": "Union Harbor Administration (fictional)",
+  "marker": "SAMPLE — NOT AN OFFICIAL FORM",
+  "templateName": "Community Services weekly memo",
+  "templateVersion": 1,
+  "weekStart": "2026-10-19",
+  "department": "Community Services",
+  "preparer": "Alexandria-Montgomery Genevieve de la Cruz-Washington",
+  "role": "Associate organizer",
+  "fields": [
+    {
+      "label": "Service category",
+      "value": "outreach"
+    },
+    {
+      "label": "Approver reference",
+      "value": "REVIEWER-REF-SAMPLE-27"
+    },
+    {
+      "label": "Preparation notes",
+      "value": "Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. "
+    }
+  ],
+  "blocks": [
+    {
+      "label": "Purpose",
+      "text": "This sample memorandum records service activities and calculated hours for the selected week."
+    },
+    {
+      "label": "Outreach reference",
+      "text": "Outreach entries are informational. Participant authorization and program approval are outside this sample workflow."
+    },
+    {
+      "label": "Review boundary",
+      "text": "A designated human reviewer must verify source entries before any use outside this demonstration."
+    }
+  ],
+  "entries": [
+    {
+      "serviceDate": "2026-10-21",
+      "activity": "Extended community outreach activity with detailed supporting record",
+      "start": "09:00",
+      "end": "16:00",
+      "breakMinutes": 60,
+      "hours": 6,
+      "notes": "Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: "
+    }
+  ],
+  "totalHours": 6,
+  "footer": "Prepared for manual review and delivery only. No signature or approval is implied.",
+  "formId": "form-04",
+  "revision": 1
+}

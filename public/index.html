@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Union Harbor · Memorandum Workspace</title><link rel="stylesheet" href="/styles.css"></head>
+<body>
+<div class="app-shell">
+ <aside class="sidebar">
+  <div class="identity"><div class="brand-mark">UH</div><div><strong>Union Harbor</strong><small>Administration workspace</small></div></div>
+  <div class="demo-ribbon"><span class="dot"></span>SYNTHETIC DEMO <span class="ribbon-secondary">Not an official form</span></div>
+  <nav aria-label="Main navigation"><button class="nav-button active" data-page="prepare"><span>▣</span> Prepare a form</button><button class="nav-button" data-page="history"><span>▤</span> History & exports</button><button class="nav-button" data-page="studio"><span>◈</span> Template studio</button><button class="nav-button" data-page="audit"><span>◷</span> Activity log</button></nav>
+  <div class="sidebar-note"><strong>Human review required</strong><p>Exports are drafts for manual verification. No form is delivered, signed, or approved automatically.</p></div>
+ </aside>
+ <main class="workspace">
+  <header class="topbar"><div><div class="eyebrow">DOCUMENT OPERATIONS <span class="top-divider">/</span> <span id="breadcrumb">Prepare</span></div><h1 id="pageTitle">Weekly service-hours memo</h1></div><div class="header-actions"><span class="pill">LOCAL DEMO</span><button class="button primary" id="newFormTop">+ New form</button></div></header>
+  <div class="flash" id="flash" role="status" aria-live="polite" hidden></div>
+  <section id="pageContent" aria-live="polite"></section>
+ </main>
+</div>
+<dialog id="newFormDialog" aria-labelledby="newFormTitle"><form method="dialog" id="newFormForm"><div class="dialog-header"><p class="eyebrow">NEW DOCUMENT</p><h2 id="newFormTitle">Start a weekly memorandum</h2><p>Choose a sample variant and a saved, non-sensitive profile. The published version effective for that week is pinned.</p></div><label>Template variant<select name="templateId" id="newTemplate" required></select></label><label>Preparer profile<select name="profileId" id="newProfile" required></select></label><label>Week beginning (Monday)<input name="weekStart" id="newWeek" type="date" required></label><div class="dialog-buttons"><button type="button" class="button" id="cancelNew">Cancel</button><button type="submit" class="button primary">Create draft</button></div></form></dialog>
+<script type="module" src="/app.js"></script>
+</body></html>

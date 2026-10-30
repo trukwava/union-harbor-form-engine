@@ -1,0 +1,54 @@
+{
+  "title": "Weekly Service-Hours Memorandum",
+  "organization": "Union Harbor Administration (fictional)",
+  "marker": "SAMPLE — NOT AN OFFICIAL FORM",
+  "templateName": "Operations weekly memo",
+  "templateVersion": 1,
+  "weekStart": "2026-10-26",
+  "department": "Operations",
+  "preparer": "Morgan Lee",
+  "role": "Administrative coordinator",
+  "fields": [
+    {
+      "label": "Service category",
+      "value": "facilities"
+    },
+    {
+      "label": "Approver reference",
+      "value": "REVIEWER-REF-SAMPLE-27"
+    },
+    {
+      "label": "Preparation notes",
+      "value": "Not supplied"
+    }
+  ],
+  "blocks": [
+    {
+      "label": "Purpose",
+      "text": "This sample memorandum records service activities and calculated hours for the selected week."
+    },
+    {
+      "label": "Facilities reference",
+      "text": "Facilities entries are informational. Equipment clearance and authorization are outside this sample workflow."
+    },
+    {
+      "label": "Review boundary",
+      "text": "A designated human reviewer must verify source entries before any use outside this demonstration."
+    }
+  ],
+  "entries": [
+    {
+      "serviceDate": "2026-10-26",
+      "activity": "Site coordination",
+      "start": "09:00",
+      "end": "12:00",
+      "breakMinutes": 30,
+      "hours": 2.5,
+      "notes": "Opening report and safety checks"
+    }
+  ],
+  "totalHours": 2.5,
+  "footer": "Prepared for manual review and delivery only. No signature or approval is implied.",
+  "formId": "form-01",
+  "revision": 1
+}
