@@ -18,6 +18,7 @@ test('end-to-end HTTP flow persists, exports and keeps v1 pinned after v3 public
  const noDuplicate=(await api('/api/bootstrap')).body.artifacts.filter(x=>x.formId==='form-01');assert.equal(noDuplicate.length,1,'Repeated export does not duplicate snapshots');
  const malformed=await api('/api/templates/operations/versions','POST',{definition:{title:'Incomplete',variables:[],blocks:'bad'}});assert.equal(malformed.status,422,'Bad administrator template must be rejected rather than crash');
 
+ const receipt=await api(`/api/artifacts/${art.id}/receipt`);assert.equal(receipt.status,200);assert.equal(receipt.body.verified,true);assert.equal(receipt.body.checksum,art.checksum);
  const doc=await fetch(base+`/api/artifacts/${art.id}/docx`);assert.equal(doc.status,200);const bytes=Buffer.from(await doc.arrayBuffer());assert.equal(bytes.subarray(0,2).toString(),'PK');
  const printed=await fetch(base+`/api/artifacts/${art.id}/pdf`);assert.equal(printed.status,200,'PDF export should function in test environment with LibreOffice');assert.equal(Buffer.from(await printed.arrayBuffer()).subarray(0,4).toString(),'%PDF');
  const bad=(await api('/api/forms/form-09/exports','POST',{}));assert.equal(bad.status,422);
@@ -33,5 +34,8 @@ test('end-to-end HTTP flow persists, exports and keeps v1 pinned after v3 public
  const delivered=await api(`/api/artifacts/${art.id}/delivery`,'POST',{note:'User reported delivery'});assert.equal(delivered.status,200);assert(delivered.body.deliveredAt);const approved=await api(`/api/artifacts/${art.id}/approval`,'POST',{reviewerRef:'REVIEWER-123'});assert.equal(approved.status,200);assert(approved.body.approvedAt);
  const other=await api('/api/forms/form-01','PUT',{baseRevision:2,answers:updated.answers,entries:updated.entries});assert.equal(other.status,200);const afterEdit=(await api('/api/bootstrap')).body.artifacts.find(x=>x.id===art.id);assert.equal(afterEdit.approvedAt,approved.body.approvedAt,'Existing exported snapshot approval remains historical');
  const dbFile=JSON.parse(await fs.readFile(dataFile,'utf8'));assert.equal(dbFile.forms.find(f=>f.id==='form-01').revision,3,'Data persists on disk');
+ dbFile.artifacts.find(x=>x.id===art.id).snapshot.title='UNAUTHORIZED LOCAL ALTERATION';await fs.writeFile(dataFile,JSON.stringify(dbFile));
+ const corruptedDoc=await fetch(base+`/api/artifacts/${art.id}/docx`);assert.equal(corruptedDoc.status,409,'Checksum mismatch blocks download');
+ const corruptedReceipt=await api(`/api/artifacts/${art.id}/receipt`);assert.equal(corruptedReceipt.status,409,'Checksum mismatch blocks verification');
  }finally{server.kill('SIGTERM');await fs.rm(dir,{recursive:true,force:true});}
 });
