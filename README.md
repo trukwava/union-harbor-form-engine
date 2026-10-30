@@ -1,0 +1,73 @@
+# Union Harbor — guided weekly memorandum preparation
+
+**SAMPLE — NOT AN OFFICIAL FORM.** Original synthetic software and content for a fictional association. No UFT wording, contractual rules, actual participants, official templates, regulatory claims, delivery integrations, or AI credentials are included.
+
+## Product
+
+A local, browser-based demonstration of guided weekly service-hours memorandum preparation. An administrator publishes immutable template definitions; a preparer fills in a profile, week, answers, and entries; the app validates calculations and produces an editable Word file and (when LibreOffice is available) a PDF from an immutable export snapshot. Human reviewers remain responsible for verification, delivery, and approvals.
+
+## Run the app
+
+Requirements: **Node.js 20+**. The downloadable package includes precompiled JavaScript and has **no runtime npm dependencies**.
+
+```bash
+cd union-harbor-form-engine
+npm start
+# open http://127.0.0.1:4173
+```
+
+Or: `node dist/src/server.js`. Run `npm run reset` to restore **only** the synthetic demo datastore (replaces `data/demo.json`). It does not affect other files. To change the port: `PORT=5000 npm start`. The server binds to `127.0.0.1` by default and should not be exposed on a public network.
+
+For development after changing TypeScript sources:
+
+```bash
+npm install           # installs TypeScript as a dev dependency; network required
+npm run build
+npm test
+```
+
+Without a network connection, when `tsc` is available globally you can build directly with `tsc -p tsconfig.json`. To execute precompiled tests without rebuilding: `node --test tests/*.test.mjs`.
+
+To export PDFs from the application, install `libreoffice` and ensure its executable is on PATH. Or use the built-in **Print / Save PDF** browser action. Missing LibreOffice returns an honest error; DOCX remains available.
+
+## Operating the demo
+
+1. Select a sample form on **Prepare a form**, or click **+ New form** and choose a variant, a profile, and a Monday.
+2. Read each question's help text. Enter service category, an approver **reference** (not an approval), and optional notes. Add one or more service entries. Differentiate blank, unknown, N/A, and provided values.
+3. Watch the right-hand live preview. Drafts save automatically on edits or via **Save draft**; a saved draft can still be invalid.
+4. Fix required-field, date, interval, unpaid-break, and overlap errors. When valid, use **Create export snapshot**, followed by the DOCX/PDF download links under **Export history**.
+5. Only after independent manual action, mark delivery as **user-reported**; only after that may an operator record a **user-reported reviewer approval** with a reference. The app performs neither external action.
+6. **Clone to next week** resets all service entries, period-specific notes, approver references, and delivery/approval claims. The profile and original template pin are retained. To change the template pin, use **Explicitly migrate** and revalidate.
+7. Use **History & exports** to recover forms and see version metadata. In **Template studio**, choose a template or create a new one; edit the constrained JSON definition; check the sample preview; publish a new immutable version. There is no arbitrary script execution.
+8. **Activity log** shows metadata-only events. **Reset demo data** is intentionally destructive and replaces all records in this *dedicated synthetic datastore*.
+
+## Paths
+
+- `src/domain.ts`: types, bounded rules, normalization, validation, cloning, snapshot rendering
+- `src/storage.ts`: sequential atomic JSON transactions; `src/fixtures.ts`: deterministic seed fixtures
+- `src/server.ts`: HTTP API, scope and revision checks, immutable export records and manual status transitions
+- `src/docx.ts`: dependency-free OOXML generator; `src/pdf.ts`: optional sandboxed LibreOffice conversion
+- `public/index.html`, `styles.css`, `app.ts`: operational interface and live preview
+- `dist/`: precompiled browser and server assets for offline startup
+- `data/demo.json`: **synthetic only**, resettable, no personal records
+- `samples/`: readable DOCX/PDF examples, JSON expected document snapshots, expected arithmetic
+- `tests/`: focused unit and end-to-end API tests
+- `docs/`: product brief, model, pilot plan, status checklist, source note
+
+## Verification
+
+`npm test` currently runs 11 Node tests, including the HTTP API from startup through persistent save, PDF/DOCX export, blocked overlap, copy-forward reset, template publication, stale update rejection, and pinned-v1 invariance. DOCX and PDF samples were rendered to page images and inspected, including a two-page extreme-content fixture. **Automated browser interaction in this build environment was blocked by the container administrator**; do not misinterpret HTTP/API tests as an exercised visual browser workflow.
+
+## Demo, privacy, and deployment limitations
+
+This is **a single-organization, locally trusted demo**, not a deployable service. There is no authentication, RBAC, production tenant isolation, rate limiting, encryption at rest, database transaction journaling, verified approval, e-signature, or online delivery. It should be used with synthetic data only. The UI and API are bound to loopback by default. JSON writes use a replace-on-rename strategy but are not a multi-process transactional database. Cross-origin mutation checks and input bounds mitigate some demo risks; they are not a substitute for real authorization or hardening.
+
+The app retains all demo form drafts, export snapshots, user-reported review records, and metadata audit events in `data/demo.json` until the operator resets it or deletes the file. The application does not send any documents or usage data to third parties. PDF generation temporarily stores an export in the system temp folder, removes it afterward, and has a conversion timeout. Treat imported text as untrusted; admin-published wording must be verified by its owner before any real pilot. Do not put personal records or secrets in this demo.
+
+## Recommended next phase
+
+See `docs/PILOT_PLAN.md`: validate the domain with a qualified owner, shadow-test 20 synthetic scenarios, obtain approved text, measure time/errors without invented performance claims, then decide whether to build authenticated persistence and a real approved-template import workflow.
+
+## GitHub publication
+
+This source package includes a CI workflow and a preconfigured local Git history, but the remote public GitHub repository must be created through an authenticated GitHub account. See [the GitHub publishing guide](docs/PUBLISH_TO_GITHUB.md). Publishing source publicly is not equivalent to deploying the application publicly.
