@@ -1,0 +1,14 @@
+[
+  {
+    "fixture": "form-01",
+    "templateVersion": "operations-v1",
+    "expectedNetHours": 2.5,
+    "docx": "weekly-memorandum-v1.docx"
+  },
+  {
+    "fixture": "form-04",
+    "templateVersion": "community-v1",
+    "expectedNetHours": 6,
+    "docx": "weekly-memorandum-long-content.docx"
+  }
+]

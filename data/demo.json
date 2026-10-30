@@ -1,0 +1,783 @@
+{
+  "organization": {
+    "id": "union-harbor",
+    "name": "Union Harbor Administration",
+    "mode": "demo"
+  },
+  "templates": [
+    {
+      "id": "operations",
+      "organizationId": "union-harbor",
+      "department": "Operations",
+      "name": "Operations weekly memo",
+      "description": "Facilities and general administration sample"
+    },
+    {
+      "id": "community",
+      "organizationId": "union-harbor",
+      "department": "Community Services",
+      "name": "Community Services weekly memo",
+      "description": "Outreach and program activities sample"
+    }
+  ],
+  "versions": [
+    {
+      "id": "operations-v1",
+      "templateId": "operations",
+      "version": 1,
+      "effectiveFrom": "2024-01-01",
+      "effectiveTo": null,
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "title": "Weekly Service-Hours Memorandum",
+      "variables": [
+        {
+          "key": "activityCategory",
+          "label": "Service category",
+          "type": "select",
+          "required": true,
+          "help": "Controls which approved explanatory block appears in the memorandum.",
+          "choices": [
+            "facilities",
+            "administration"
+          ]
+        },
+        {
+          "key": "approverRef",
+          "label": "Approver reference",
+          "type": "text",
+          "required": true,
+          "help": "Reference for a person who may review the document. Entering this does not constitute approval.",
+          "maxLength": 120
+        },
+        {
+          "key": "notes",
+          "label": "Preparation notes",
+          "type": "text",
+          "required": false,
+          "help": "Optional context for the human reviewer. This is not an approval or a delivery instruction.",
+          "maxLength": 2000
+        }
+      ],
+      "blocks": [
+        {
+          "id": "intro",
+          "label": "Purpose",
+          "order": 1,
+          "text": "This sample memorandum records service activities and calculated hours for the selected week."
+        },
+        {
+          "id": "conditions",
+          "label": "Facilities reference",
+          "order": 2,
+          "text": "Facilities entries are informational. Equipment clearance and authorization are outside this sample workflow."
+        },
+        {
+          "id": "review",
+          "label": "Review boundary",
+          "order": 3,
+          "text": "A designated human reviewer must verify source entries before any use outside this demonstration."
+        }
+      ],
+      "branches": [
+        {
+          "blockId": "conditions",
+          "field": "activityCategory",
+          "op": "eq",
+          "value": "facilities"
+        }
+      ],
+      "outputFields": [
+        "activityCategory",
+        "approverRef",
+        "notes"
+      ],
+      "validationRules": {
+        "requireEntry": true,
+        "maxEntries": 60,
+        "requireApprover": true
+      },
+      "status": "published"
+    },
+    {
+      "id": "operations-v2",
+      "templateId": "operations",
+      "version": 2,
+      "effectiveFrom": "2026-01-01",
+      "effectiveTo": null,
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "title": "Weekly Service-Hours Memorandum",
+      "variables": [
+        {
+          "key": "activityCategory",
+          "label": "Service category",
+          "type": "select",
+          "required": true,
+          "help": "Controls which approved explanatory block appears in the memorandum.",
+          "choices": [
+            "facilities",
+            "administration"
+          ]
+        },
+        {
+          "key": "approverRef",
+          "label": "Approver reference",
+          "type": "text",
+          "required": true,
+          "help": "Reference for a person who may review the document. Entering this does not constitute approval.",
+          "maxLength": 120
+        },
+        {
+          "key": "notes",
+          "label": "Preparation notes",
+          "type": "text",
+          "required": false,
+          "help": "Optional context for the human reviewer. This is not an approval or a delivery instruction.",
+          "maxLength": 2000
+        }
+      ],
+      "blocks": [
+        {
+          "id": "intro",
+          "label": "Purpose",
+          "order": 1,
+          "text": "This revised sample memorandum records service activities, unpaid breaks, and calculated net hours for the selected week."
+        },
+        {
+          "id": "conditions",
+          "label": "Facilities reference",
+          "order": 2,
+          "text": "Facilities entries are informational. Equipment clearance and authorization are outside this sample workflow."
+        },
+        {
+          "id": "review",
+          "label": "Review boundary",
+          "order": 3,
+          "text": "A designated human reviewer must verify source entries before any use outside this demonstration."
+        }
+      ],
+      "branches": [
+        {
+          "blockId": "conditions",
+          "field": "activityCategory",
+          "op": "eq",
+          "value": "facilities"
+        }
+      ],
+      "outputFields": [
+        "activityCategory",
+        "approverRef",
+        "notes"
+      ],
+      "validationRules": {
+        "requireEntry": true,
+        "maxEntries": 60,
+        "requireApprover": true
+      },
+      "status": "published"
+    },
+    {
+      "id": "community-v1",
+      "templateId": "community",
+      "version": 1,
+      "effectiveFrom": "2024-01-01",
+      "effectiveTo": null,
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "title": "Weekly Service-Hours Memorandum",
+      "variables": [
+        {
+          "key": "activityCategory",
+          "label": "Service category",
+          "type": "select",
+          "required": true,
+          "help": "Controls which approved explanatory block appears in the memorandum.",
+          "choices": [
+            "outreach",
+            "programming"
+          ]
+        },
+        {
+          "key": "approverRef",
+          "label": "Approver reference",
+          "type": "text",
+          "required": true,
+          "help": "Reference for a person who may review the document. Entering this does not constitute approval.",
+          "maxLength": 120
+        },
+        {
+          "key": "notes",
+          "label": "Preparation notes",
+          "type": "text",
+          "required": false,
+          "help": "Optional context for the human reviewer. This is not an approval or a delivery instruction.",
+          "maxLength": 2000
+        }
+      ],
+      "blocks": [
+        {
+          "id": "intro",
+          "label": "Purpose",
+          "order": 1,
+          "text": "This sample memorandum records service activities and calculated hours for the selected week."
+        },
+        {
+          "id": "conditions",
+          "label": "Outreach reference",
+          "order": 2,
+          "text": "Outreach entries are informational. Participant authorization and program approval are outside this sample workflow."
+        },
+        {
+          "id": "review",
+          "label": "Review boundary",
+          "order": 3,
+          "text": "A designated human reviewer must verify source entries before any use outside this demonstration."
+        }
+      ],
+      "branches": [
+        {
+          "blockId": "conditions",
+          "field": "activityCategory",
+          "op": "eq",
+          "value": "outreach"
+        }
+      ],
+      "outputFields": [
+        "activityCategory",
+        "approverRef",
+        "notes"
+      ],
+      "validationRules": {
+        "requireEntry": true,
+        "maxEntries": 60,
+        "requireApprover": true
+      },
+      "status": "published"
+    },
+    {
+      "id": "community-v2",
+      "templateId": "community",
+      "version": 2,
+      "effectiveFrom": "2026-01-01",
+      "effectiveTo": null,
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "title": "Weekly Service-Hours Memorandum",
+      "variables": [
+        {
+          "key": "activityCategory",
+          "label": "Service category",
+          "type": "select",
+          "required": true,
+          "help": "Controls which approved explanatory block appears in the memorandum.",
+          "choices": [
+            "outreach",
+            "programming"
+          ]
+        },
+        {
+          "key": "approverRef",
+          "label": "Approver reference",
+          "type": "text",
+          "required": true,
+          "help": "Reference for a person who may review the document. Entering this does not constitute approval.",
+          "maxLength": 120
+        },
+        {
+          "key": "notes",
+          "label": "Preparation notes",
+          "type": "text",
+          "required": false,
+          "help": "Optional context for the human reviewer. This is not an approval or a delivery instruction.",
+          "maxLength": 2000
+        }
+      ],
+      "blocks": [
+        {
+          "id": "intro",
+          "label": "Purpose",
+          "order": 1,
+          "text": "This revised sample memorandum records service activities, unpaid breaks, and calculated net hours for the selected week."
+        },
+        {
+          "id": "conditions",
+          "label": "Outreach reference",
+          "order": 2,
+          "text": "Outreach entries are informational. Participant authorization and program approval are outside this sample workflow."
+        },
+        {
+          "id": "review",
+          "label": "Review boundary",
+          "order": 3,
+          "text": "A designated human reviewer must verify source entries before any use outside this demonstration."
+        }
+      ],
+      "branches": [
+        {
+          "blockId": "conditions",
+          "field": "activityCategory",
+          "op": "eq",
+          "value": "outreach"
+        }
+      ],
+      "outputFields": [
+        "activityCategory",
+        "approverRef",
+        "notes"
+      ],
+      "validationRules": {
+        "requireEntry": true,
+        "maxEntries": 60,
+        "requireApprover": true
+      },
+      "status": "published"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "profile-1",
+      "organizationId": "union-harbor",
+      "fullName": "Morgan Lee",
+      "role": "Administrative coordinator",
+      "department": "Operations"
+    },
+    {
+      "id": "profile-2",
+      "organizationId": "union-harbor",
+      "fullName": "Sam Rivera",
+      "role": "Service coordinator",
+      "department": "Community Services"
+    },
+    {
+      "id": "profile-3",
+      "organizationId": "union-harbor",
+      "fullName": "Alexandria-Montgomery Genevieve de la Cruz-Washington",
+      "role": "Associate organizer",
+      "department": "Community Services"
+    }
+  ],
+  "forms": [
+    {
+      "id": "form-01",
+      "organizationId": "union-harbor",
+      "templateId": "operations",
+      "templateVersionId": "operations-v1",
+      "profileId": "profile-1",
+      "department": "Operations",
+      "weekStart": "2026-10-26",
+      "answers": {
+        "activityCategory": {
+          "state": "value",
+          "value": "facilities"
+        },
+        "approverRef": {
+          "state": "value",
+          "value": "REVIEWER-REF-SAMPLE-27"
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-1",
+          "serviceDate": "2026-10-26",
+          "activity": "Site coordination",
+          "start": "09:00",
+          "end": "12:00",
+          "breakMinutes": 30,
+          "notes": "Opening report and safety checks"
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-02",
+      "organizationId": "union-harbor",
+      "templateId": "community",
+      "templateVersionId": "community-v2",
+      "profileId": "profile-2",
+      "department": "Community Services",
+      "weekStart": "2026-10-26",
+      "answers": {
+        "activityCategory": {
+          "state": "value",
+          "value": "outreach"
+        },
+        "approverRef": {
+          "state": "value",
+          "value": "REVIEWER-REF-SAMPLE-27"
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-2",
+          "serviceDate": "2026-10-27",
+          "activity": "Community workshop",
+          "start": "10:00",
+          "end": "14:00",
+          "breakMinutes": 30,
+          "notes": ""
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-03",
+      "organizationId": "union-harbor",
+      "templateId": "operations",
+      "templateVersionId": "operations-v1",
+      "profileId": "profile-3",
+      "department": "Operations",
+      "weekStart": "2024-02-26",
+      "answers": {
+        "activityCategory": {
+          "state": "value",
+          "value": "facilities"
+        },
+        "approverRef": {
+          "state": "value",
+          "value": "REVIEWER-REF-SAMPLE-27"
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-3",
+          "serviceDate": "2024-02-29",
+          "activity": "Leap-day inventory",
+          "start": "08:00",
+          "end": "11:30",
+          "breakMinutes": 0,
+          "notes": "Leap year fixture"
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-04",
+      "organizationId": "union-harbor",
+      "templateId": "community",
+      "templateVersionId": "community-v1",
+      "profileId": "profile-3",
+      "department": "Community Services",
+      "weekStart": "2026-10-19",
+      "answers": {
+        "activityCategory": {
+          "state": "value",
+          "value": "outreach"
+        },
+        "approverRef": {
+          "state": "value",
+          "value": "REVIEWER-REF-SAMPLE-27"
+        },
+        "notes": {
+          "state": "value",
+          "value": "Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. Synthetic narrative for layout testing. "
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-4",
+          "serviceDate": "2026-10-21",
+          "activity": "Extended community outreach activity with detailed supporting record",
+          "start": "09:00",
+          "end": "16:00",
+          "breakMinutes": 60,
+          "notes": "Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: Extended synthetic entry: "
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-05",
+      "organizationId": "union-harbor",
+      "templateId": "operations",
+      "templateVersionId": "operations-v2",
+      "profileId": "profile-1",
+      "department": "Operations",
+      "weekStart": "2026-10-19",
+      "answers": {
+        "activityCategory": {
+          "state": "value",
+          "value": "facilities"
+        },
+        "approverRef": {
+          "state": "value",
+          "value": "REVIEWER-REF-SAMPLE-27"
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-5",
+          "serviceDate": "2026-10-20",
+          "activity": "Desk coverage",
+          "start": "11:00",
+          "end": "13:00",
+          "breakMinutes": 0,
+          "notes": ""
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-06",
+      "organizationId": "union-harbor",
+      "templateId": "community",
+      "templateVersionId": "community-v1",
+      "profileId": "profile-2",
+      "department": "Community Services",
+      "weekStart": "2026-10-12",
+      "answers": {
+        "activityCategory": {
+          "state": "value",
+          "value": "outreach"
+        },
+        "approverRef": {
+          "state": "value",
+          "value": "REVIEWER-REF-SAMPLE-27"
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-6",
+          "serviceDate": "2026-10-13",
+          "activity": "Weekly programming",
+          "start": "13:00",
+          "end": "16:15",
+          "breakMinutes": 15,
+          "notes": ""
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-07",
+      "organizationId": "union-harbor",
+      "templateId": "operations",
+      "templateVersionId": "operations-v2",
+      "profileId": "profile-1",
+      "department": "Operations",
+      "weekStart": "2026-10-26",
+      "answers": {
+        "activityCategory": {
+          "state": "blank",
+          "value": ""
+        },
+        "approverRef": {
+          "state": "blank",
+          "value": ""
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-08",
+      "organizationId": "union-harbor",
+      "templateId": "community",
+      "templateVersionId": "community-v2",
+      "profileId": "profile-3",
+      "department": "Community Services",
+      "weekStart": "2026-10-26",
+      "answers": {
+        "activityCategory": {
+          "state": "blank",
+          "value": ""
+        },
+        "approverRef": {
+          "state": "blank",
+          "value": ""
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-8",
+          "serviceDate": "2026-10-28",
+          "activity": "An incomplete activity",
+          "start": "09:00",
+          "end": "10:00",
+          "breakMinutes": 0,
+          "notes": ""
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    },
+    {
+      "id": "form-09",
+      "organizationId": "union-harbor",
+      "templateId": "operations",
+      "templateVersionId": "operations-v1",
+      "profileId": "profile-1",
+      "department": "Operations",
+      "weekStart": "2026-10-26",
+      "answers": {
+        "activityCategory": {
+          "state": "value",
+          "value": "facilities"
+        },
+        "approverRef": {
+          "state": "value",
+          "value": "REVIEWER-REF-SAMPLE-27"
+        },
+        "notes": {
+          "state": "blank",
+          "value": ""
+        }
+      },
+      "entries": [
+        {
+          "id": "entry-9a",
+          "serviceDate": "2026-10-29",
+          "activity": "Overlap case A",
+          "start": "09:00",
+          "end": "11:00",
+          "breakMinutes": 0,
+          "notes": ""
+        },
+        {
+          "id": "entry-9b",
+          "serviceDate": "2026-10-29",
+          "activity": "Overlap case B",
+          "start": "10:30",
+          "end": "12:00",
+          "breakMinutes": 0,
+          "notes": ""
+        }
+      ],
+      "revision": 1,
+      "revisions": [
+        {
+          "number": 1,
+          "at": "2026-10-29T19:00:00.000Z",
+          "fields": [
+            "seed"
+          ]
+        }
+      ],
+      "createdAt": "2026-10-29T19:00:00.000Z",
+      "updatedAt": "2026-10-29T19:00:00.000Z"
+    }
+  ],
+  "artifacts": [],
+  "audit": [
+    {
+      "id": "seed-event",
+      "at": "2026-10-29T19:00:00.000Z",
+      "entityType": "organization",
+      "entityId": "union-harbor",
+      "action": "demo_seed",
+      "detail": "9 forms, 3 profiles; SAMPLE — NOT AN OFFICIAL FORM"
+    }
+  ],
+  "reviews": []
+}

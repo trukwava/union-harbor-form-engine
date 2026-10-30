@@ -1,0 +1,22 @@
+{
+  "name": "union-harbor-form-engine",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Synthetic guided weekly memorandum preparation demo. NOT an official form.",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/src/server.js",
+    "dev": "npm run build && npm start",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "reset": "node dist/src/reset.js",
+    "samples": "node dist/src/make-samples.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
