@@ -39,7 +39,18 @@ async function route(req:any,res:any){
  if(pathname==='/app.js'&&method==='GET')return file(res,path.join(root,'dist/public/app.js'),'text/javascript; charset=utf-8');
  if(!pathname.startsWith('/api/'))return fail(404,'Not found');
  // Reject cross-origin write attempts. Single-organization local demo; not production auth.
- if(method!=='GET'){const origin=req.headers.origin;if(origin){const site=new URL(origin);assert(site.hostname===host||site.hostname==='localhost'||site.hostname==='127.0.0.1',403,'Cross-origin mutation blocked');}assert((req.headers['content-type']||'').startsWith('application/json'),415,'JSON content type required');}
+ if(method!=='GET'){
+  const origin=req.headers.origin;
+  if(origin){
+   let site:URL;
+   try{site=new URL(origin);}catch{fail(403,'Invalid Origin header');}
+   const authority=String(req.headers.host||'');
+   let requestHost:URL;
+   try{requestHost=new URL('http://'+authority);}catch{fail(403,'Invalid Host header');}
+   assert(site!.protocol==='http:'&&site!.host===requestHost!.host&&site!.username===''&&site!.password==='',403,'Cross-origin mutation blocked');
+  }
+  assert((req.headers['content-type']||'').startsWith('application/json'),415,'JSON content type required');
+ }
  if(pathname==='/api/bootstrap'&&method==='GET')return send(res,200,meta(await store.read()));
  if(pathname==='/api/demo/reset'&&method==='POST'){assert(['127.0.0.1','::1','::ffff:127.0.0.1'].includes(req.socket.remoteAddress),403,'Demo reset restricted to loopback');await store.reset();return send(res,200,{ok:true,warning:'Synthetic data only; existing demo records replaced'});}
  if(pathname==='/api/forms'&&method==='POST'){const b=await input(req);const created=await store.transact(db=>{const t=db.templates.find(t=>t.id===b.templateId),p=db.profiles.find(p=>p.id===b.profileId);assert(t&&p&&t.organizationId===db.organization.id&&p.organizationId===db.organization.id,422,'Template/profile not found');assert(isDateOnly(b.weekStart)&&monday(b.weekStart)===b.weekStart,422,'Select a Monday');const v=db.versions.filter(x=>x.templateId===t!.id&&x.effectiveFrom<=b.weekStart&&(!x.effectiveTo||x.effectiveTo>=b.weekStart)).sort((a,b)=>b.version-a.version)[0];assert(v,422,'No published template version effective for that week');const instant=now(),f:FormInstance={id:id('form'),organizationId:db.organization.id,templateId:t!.id,templateVersionId:v!.id,profileId:p!.id,department:t!.department,weekStart:b.weekStart,answers:Object.fromEntries(v!.variables.map(x=>[x.key,{state:'blank',value:''}])),entries:[],revision:0,revisions:[],createdAt:instant,updatedAt:instant};db.forms.unshift(f);log(db,'form',f.id,'created',`Pinned ${v!.id}`);return f;});return send(res,201,created);}
