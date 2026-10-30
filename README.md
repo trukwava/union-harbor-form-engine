@@ -67,6 +67,10 @@ This is **a single-organization, locally trusted demo**, not a deployable servic
 
 The app retains all demo form drafts, export snapshots, user-reported review records, and metadata audit events in `data/demo.json` until the operator resets it or deletes the file. The application does not send any documents or usage data to third parties. PDF generation temporarily stores an export in the system temp folder, removes it afterward, and has a conversion timeout. Treat imported text as untrusted; admin-published wording must be verified by its owner before any real pilot. Do not put personal records or secrets in this demo.
 
+## Save and navigation safeguards
+
+The browser now avoids creating a new answer revision when no fields changed; repeated **Create export snapshot** clicks can therefore recover the same immutable export. Pending saves are drained before navigating away, cloning or exporting. When a save fails, the app retains an unsaved-changes warning and blocks export/navigation rather than treating a stale server revision as current. This behavior is covered by the deterministic API tests and source review; automated browser navigation was blocked by the container administrator and remains a separate manual verification obligation.
+
 ## Stored snapshot verification
 
 Each export has a SHA-256 checksum of its saved document snapshot. The **Verify** button checks the stored snapshot against that checksum and reports the saved template/revision metadata; DOCX/PDF downloads and reported delivery/approval records perform the same check and return `409` if it fails. The receipt endpoint is `GET /api/artifacts/{id}/receipt`. It detects accidental alteration of the local JSON datastore; **it is not a digital signature, tamper-proof audit log, reviewer authorization, or a substitute for production authentication**. An attacker with full filesystem access could rewrite both the data and checksum.
