@@ -14,3 +14,14 @@ test('clone retains profile and pinned template, but resets entries, stale field
 test('versioned export snapshot has no unresolved placeholders and DOCX is a ZIP file',()=>{const {f,v,p,t}=ctx('form-01'),r=validateForm(f,v,p),doc=snapshot(f,v,t,p,r),buffer=renderDocx(doc);assert(!JSON.stringify(doc).includes('[UNFILLED]'));assert.equal(buffer.subarray(0,2).toString('utf8'),'PK');assert(buffer.length>1500);assert.equal(doc.templateVersion,1);});
 test('HTML/XML injection from user fields is encoded for document safety',()=>{assert.equal(escapeXml('<x a="b">&'), '&lt;x a=&quot;b&quot;&gt;&amp;');});
 test('all seed records have intended classifications',()=>{const db=seed();let ready=0;for(const f of db.forms){const v=db.versions.find(x=>x.id===f.templateVersionId),p=db.profiles.find(x=>x.id===f.profileId);if(validateForm(f,v,p).ready)ready++;}assert.equal(ready,6);assert.equal(db.forms.length,9);assert.equal(db.profiles.length,3);assert.equal(db.versions.length,4);});
+
+test('template studio rejects malformed, duplicate and unsafe schemas without throwing',()=>{
+ const {v}=ctx('form-01');
+ for(const bad of [null,[],{...v,variables:null},{...v,blocks:'not blocks'},{...v,branches:[null]},{...v,outputFields:{}},{...v,validationRules:null}]){
+  assert.doesNotThrow(()=>validateTemplate(bad));assert(validateTemplate(bad).length>0);
+ }
+ const duplicate=structuredClone(v);duplicate.blocks.push({...duplicate.blocks[0]});assert(validateTemplate(duplicate).some(x=>x.includes('Duplicate approved block')));
+ const invalidSelect=structuredClone(v);invalidSelect.variables[0].choices=[];assert(validateTemplate(invalidSelect).some(x=>x.includes('Select variable requires choices')));
+ const noApprover=structuredClone(v);noApprover.variables=noApprover.variables.filter(x=>x.key!=='approverRef');assert(validateTemplate(noApprover).some(x=>x.includes('Approver reference variable')));
+ assert.deepEqual(validateTemplate(v),[]);
+});

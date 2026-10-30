@@ -14,6 +14,10 @@ test('end-to-end HTTP flow persists, exports and keeps v1 pinned after v3 public
  const meta=(await api('/api/bootstrap')).body;assert.equal(meta.forms.length,9);assert.equal(meta.forms.filter(f=>f.ready).length,6);
  const f1=(await api('/api/forms/form-01')).body;assert.equal(f1.form.templateVersionId,'operations-v1');assert.equal(f1.document.totalHours,2.5);
  const a=(await api('/api/forms/form-01/exports','POST',{}));assert.equal(a.status,201);const art=a.body;assert.equal(art.templateVersionId,'operations-v1');
+ const repeat=await api('/api/forms/form-01/exports','POST',{});assert.equal(repeat.status,201);assert.equal(repeat.body.id,art.id);assert.equal(repeat.body.reused,true);
+ const noDuplicate=(await api('/api/bootstrap')).body.artifacts.filter(x=>x.formId==='form-01');assert.equal(noDuplicate.length,1,'Repeated export does not duplicate snapshots');
+ const malformed=await api('/api/templates/operations/versions','POST',{definition:{title:'Incomplete',variables:[],blocks:'bad'}});assert.equal(malformed.status,422,'Bad administrator template must be rejected rather than crash');
+
  const doc=await fetch(base+`/api/artifacts/${art.id}/docx`);assert.equal(doc.status,200);const bytes=Buffer.from(await doc.arrayBuffer());assert.equal(bytes.subarray(0,2).toString(),'PK');
  const printed=await fetch(base+`/api/artifacts/${art.id}/pdf`);assert.equal(printed.status,200,'PDF export should function in test environment with LibreOffice');assert.equal(Buffer.from(await printed.arrayBuffer()).subarray(0,4).toString(),'%PDF');
  const bad=(await api('/api/forms/form-09/exports','POST',{}));assert.equal(bad.status,422);
